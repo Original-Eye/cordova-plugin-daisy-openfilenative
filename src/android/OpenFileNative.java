@@ -147,6 +147,7 @@ public class OpenFileNative extends CordovaPlugin {
               
                     // 
                     String headerFileName = httpConnection.getHeaderField("Content-Disposition");
+                    // Log.d(LOG_TAG, "headerFileName : " + headerFileName);
                     Pattern p = Pattern.compile("filename=(.*)");
                     Matcher m = p.matcher(headerFileName);
                     if (m.find())
@@ -155,7 +156,8 @@ public class OpenFileNative extends CordovaPlugin {
                         targetFileName = m.group(1);
                     }
                 }
-
+                // spaces come across as plus signs. 'Trim('+')'
+                targetFileName = targetFileName.startsWith("+") ? targetFileName.substring(1).trim() : targetFileName.trim();
                 // Log.d(LOG_TAG, "targetFileName : " + targetFileName);
 
                 // download the file and save it in externalcachedir
@@ -251,6 +253,9 @@ public class OpenFileNative extends CordovaPlugin {
             } else if (guessedFileName.contains(".rtf")) {
                 // RTF file
                 mimeType = "application/rtf";
+            } else if (guessedFileName.contains(".eml")) {
+                // Message file
+                mimeType = "message/rfc822";
             }
 
             intent.setDataAndType(uri, mimeType);
