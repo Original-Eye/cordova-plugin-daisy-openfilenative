@@ -1,8 +1,10 @@
 # OpenFileNative
 
 fork from https://github.com/markeeftb/FileOpener
+and then forked from: https://github.com/andischerer/cordova-plugin-openfilenative
 
 @author Andreas Scherer
+updated by Steve Clements
 
 Simple Plugin which allows yout to open various local and remote files (jpg, png, pdf, ...) in
 native Device App. The file mime-type must be supported and you have to install a native App (e.g. Adobe Reader to view PDF Files) to open it.
