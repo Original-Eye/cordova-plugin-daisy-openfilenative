@@ -1,7 +1,7 @@
 // fork from https://github.com/markeeftb/FileOpener
 // and then forked from: https://github.com/andischerer/cordova-plugin-openfilenative
 
-package org.apache.cordova.openfilenative;
+package org.apache.cordova.daisy.openfilenative;
 
 import android.app.ProgressDialog;
 import android.content.Context;
