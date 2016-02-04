@@ -1,16 +1,16 @@
 {
-  "name": "cordova-plugin-openfilenative",
+  "name": "cordova-plugin-daisy-openfilenative",
   "version": "1.0.3",
   "description": "Cordova-Plugin which allows yout to open various local/remote files (jpg, png, pdf, ...) in native Device App; Android 2.x+",
   "cordova": {
-    "id": "cordova-plugin-openfilenative",
+    "id": "cordova-plugin-daisy-openfilenative",
     "platforms": [
       "android"
     ]
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andischerer/cordova-plugin-openfilenative.git"
+    "url": "git+https://github.com/Original-Eye/cordova-plugin-openfilenative"
   },
   "keywords": [
     "Image",
@@ -24,7 +24,7 @@
   "author": "Andreas Scherer",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/andischerer/cordova-plugin-openfilenative/issues"
+    "url": "https://github.com/Original-Eye/cordova-plugin-openfilenative/issues"
   },
-  "homepage": "https://github.com/andischerer/cordova-plugin-openfilenative#readme"
+  "homepage": "https://github.com/Original-Eye/cordova-plugin-openfilenative#readme"
 }
