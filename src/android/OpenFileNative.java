@@ -1,4 +1,6 @@
 // fork from https://github.com/markeeftb/FileOpener
+// and then forked from: https://github.com/andischerer/cordova-plugin-openfilenative
+
 package org.apache.cordova.openfilenative;
 
 import android.app.ProgressDialog;
@@ -9,11 +11,15 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.webkit.URLUtil;
 import android.widget.Toast;
+import android.util.Log;
+import java.util.*;
+import java.util.regex.*;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.LOG;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -29,7 +35,11 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 
+
+
 public class OpenFileNative extends CordovaPlugin {
+    
+    protected static final String LOG_TAG = "OpenFileNative";
 
     private Context context;
 
@@ -47,6 +57,9 @@ public class OpenFileNative extends CordovaPlugin {
                 public void run() {
                     try {
                         URI uri = new URI(fileToOpen);
+                        
+                        Log.d(LOG_TAG, "URI: " + uri.toString());
+                        
                         if (uri.getScheme().equalsIgnoreCase("market")) {
                             openMarketLink(fileToOpen);
                         } else {
@@ -93,23 +106,19 @@ public class OpenFileNative extends CordovaPlugin {
             OutputStream output = null;
             HttpURLConnection httpConnection = null;
             URI uri = fileUris[0];
-            String targetFileName;
+            String targetFileName = "file.txt";
             int fileLength = 0;
 
-            int sep = uri.toString().lastIndexOf("/");
-            if (sep > 0) {
-                targetFileName = uri.toString().substring(sep + 1, uri.toString().length());
-            } else {
-                targetFileName = uri.toString();
-            }
-
             try {
+                
                 if (!uri.isAbsolute()){
+                    
                     // local file in assets folder
                     AssetManager am = context.getAssets();
                     input = am.open("www/" + uri.toString());
 
                 } else if (uri.getScheme().equalsIgnoreCase("file")) {
+
                     // local file in phone storage
                     URLConnection urlConnection = uri.toURL().openConnection();
                     fileLength = urlConnection.getContentLength();
@@ -117,9 +126,12 @@ public class OpenFileNative extends CordovaPlugin {
 
                 } else {
                     // Remote file
+                 
                     URL url = uri.toURL();
+                  
                     httpConnection = (HttpURLConnection) url.openConnection();
                     httpConnection.connect();
+                    
 
                     // expect HTTP 200 OK, so we don't mistakenly save error report
                     // instead of the file
@@ -132,7 +144,19 @@ public class OpenFileNative extends CordovaPlugin {
                     // might be -1: server did not report the length
                     fileLength = httpConnection.getContentLength();
                     input = httpConnection.getInputStream();
+              
+                    // 
+                    String headerFileName = httpConnection.getHeaderField("Content-Disposition");
+                    Pattern p = Pattern.compile("filename=(.*)");
+                    Matcher m = p.matcher(headerFileName);
+                    if (m.find())
+                    {
+                        // target group 1 is everything AFTER the filename=, so just the filename
+                        targetFileName = m.group(1);
+                    }
                 }
+
+                // Log.d(LOG_TAG, "targetFileName : " + targetFileName);
 
                 // download the file and save it in externalcachedir
                 // so other apps can acces the file
