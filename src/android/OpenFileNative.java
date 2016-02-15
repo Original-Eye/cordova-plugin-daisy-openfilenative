@@ -86,6 +86,7 @@ public class OpenFileNative extends CordovaPlugin {
         // declare the dialog as a member field of your activity
         private ProgressDialog mProgressDialog;
         private File targetFile;
+        private String mimeType;
 
         @Override
         protected void onPreExecute() {
@@ -146,6 +147,8 @@ public class OpenFileNative extends CordovaPlugin {
                     input = httpConnection.getInputStream();
               
                     // 
+                    mimeType = httpConnection.getHeaderField("Content-Type");
+                    // Log.d(LOG_TAG, "mimeType is  : " + mimeType);
                     String headerFileName = httpConnection.getHeaderField("Content-Disposition");
                     // Log.d(LOG_TAG, "headerFileName : " + headerFileName);
                     Pattern p = Pattern.compile("filename=(.*)");
@@ -218,7 +221,7 @@ public class OpenFileNative extends CordovaPlugin {
         private void openFile(String sUrl) {
             File file = new File(sUrl);
             Uri uri = Uri.fromFile(file);
-            String mimeType = URLConnection.guessContentTypeFromName(sUrl);
+            // String mimeType = URLConnection.guessContentTypeFromName(sUrl);
             String guessedFileName = URLUtil.guessFileName(sUrl, null, null);
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
